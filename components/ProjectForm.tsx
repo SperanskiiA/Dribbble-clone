@@ -29,6 +29,10 @@ const ProjectForm = ({ type, session, project }: ProjectFormProps) => {
 
     const router = useRouter()
 
+    const handleStateChange = (fieldName: string, value: string) => {
+        setForm((prev) => ({ ...prev, [fieldName]: value }))
+    }
+
     const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
@@ -70,13 +74,9 @@ const ProjectForm = ({ type, session, project }: ProjectFormProps) => {
 
         reader.onload = () => {
             const result = reader.result as string
-
+            console.log(result)
             handleStateChange('image', result)
         }
-    }
-
-    const handleStateChange = (fieldName: string, value: string) => {
-        setForm((prev) => ({ ...prev, [fieldName]: value }))
     }
 
     return (
