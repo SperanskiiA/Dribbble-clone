@@ -55,6 +55,7 @@ const ProjectForm = ({ type, session, project }: ProjectFormProps) => {
         } catch (error) {
             console.log(error)
         } finally {
+            console.log(form.image)
             console.log(form)
             setSubmitting(false)
         }
@@ -75,7 +76,7 @@ const ProjectForm = ({ type, session, project }: ProjectFormProps) => {
 
         reader.onload = () => {
             const result = reader.result as string
-            console.log(result)
+
             handleStateChange('image', result)
         }
     }
