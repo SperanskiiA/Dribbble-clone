@@ -30,7 +30,7 @@ export const dynamicParams = true
 export const revalidate = 0
 
 const Home = async ({ searchParams: { category, endcursor } }: Props) => {
-    const Category = category ? category : ''
+    const Category = category ? category : ' '
     const projects = (await fetchAllProjects(
         Category,
         endcursor
