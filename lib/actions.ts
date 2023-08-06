@@ -121,39 +121,70 @@ export const deleteUserProject = (id: string, token: string) => {
     return makeGraphQLRequest(deleteProjectMutation, { id })
 }
 
+// export const updateUserProject = async (
+//     form: ProjectForm,
+//     projectId: string,
+//     token: string
+// ) => {
+//     function isBase64URL(s: string) {
+//         // Define the regular expression pattern for Base64 URL
+//         const pattern = /^data:image\/[a-z]+;base64,/
+
+//         // Use test method to check if the string matches the pattern
+//         return pattern.test(s)
+//     }
+
+//     let updatedForm = { ...form }
+
+//     const isUploadingNewImage = isBase64URL(form.image)
+
+//     if (isUploadingNewImage) {
+//         const imageUrl = await uploadImage(form.image)
+
+//         if (imageUrl.url) {
+//             updatedForm = {
+//                 ...form,
+//                 image: imageUrl.url,
+//             }
+//         }
+//     }
+
+//     const variables = {
+//         id: projectId,
+//         input: updatedForm,
+//     }
+
+//     client.setHeader('Authorization', `Bearer ${token}`)
+//     return makeGraphQLRequest(updateProjectMutation, variables)
+// }
 export const updateUserProject = async (
     form: ProjectForm,
     projectId: string,
     token: string
 ) => {
-    function isBase64URL(s: string) {
-        // Define the regular expression pattern for Base64 URL
-        const pattern = /^data:image\/[a-z]+;base64,/
-
-        // Use test method to check if the string matches the pattern
-        return pattern.test(s)
+    function isBase64DataURL(value: string) {
+        const base64Regex = /^data:image\/[a-z]+;base64,/
+        return base64Regex.test(value)
     }
 
     let updatedForm = { ...form }
 
-    const isUploadingNewImage = isBase64URL(form.image)
+    const isUploadingNewImage = isBase64DataURL(form.image)
 
     if (isUploadingNewImage) {
         const imageUrl = await uploadImage(form.image)
 
         if (imageUrl.url) {
-            updatedForm = {
-                ...form,
-                image: imageUrl.url,
-            }
+            updatedForm = { ...updatedForm, image: imageUrl.url }
         }
     }
+
+    client.setHeader('Authorization', `Bearer ${token}`)
 
     const variables = {
         id: projectId,
         input: updatedForm,
     }
 
-    client.setHeader('Authorization', `Bearer ${token}`)
     return makeGraphQLRequest(updateProjectMutation, variables)
 }
