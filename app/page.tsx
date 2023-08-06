@@ -36,8 +36,8 @@ const Home = async ({ searchParams: { category, endcursor } }: Props) => {
         endcursor
     )) as ProjectSearch
 
-    // const projectsToRender = projects?.projectSearch?.edges || []
-    const projectsToRender = [] as any
+    const projectsToRender = projects?.projectSearch?.edges || []
+
     if (projectsToRender.length === 0) {
         return (
             <section className="flexStart flex-col paddings">
@@ -54,23 +54,20 @@ const Home = async ({ searchParams: { category, endcursor } }: Props) => {
             <Categories />
 
             <section className="projects-grid">
-                {
-                    //@ts-ignore
-                    projectsToRender.map(
-                        ({ node }: { node: ProjectInterface }) => (
-                            <ProjectCard
-                                key={node?.id}
-                                id={node?.id}
-                                image={node?.image}
-                                title={node?.title}
-                                description={node?.description}
-                                name={node?.createdBy?.name}
-                                avatarUrl={node?.createdBy?.avatarUrl}
-                                userId={node?.createdBy?.id}
-                            />
-                        )
+                {projectsToRender.map(
+                    ({ node }: { node: ProjectInterface }) => (
+                        <ProjectCard
+                            key={node?.id}
+                            id={node?.id}
+                            image={node?.image}
+                            title={node?.title}
+                            description={node?.description}
+                            name={node?.createdBy?.name}
+                            avatarUrl={node?.createdBy?.avatarUrl}
+                            userId={node?.createdBy?.id}
+                        />
                     )
-                }
+                )}
             </section>
 
             <Pagination
