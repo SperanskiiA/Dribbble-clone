@@ -6,7 +6,7 @@ type ProjectCardProps = {
     id: string
     image: string
     title: string
-    description: string
+    description?: string
     name: string
     avatarUrl: string
     userId: string

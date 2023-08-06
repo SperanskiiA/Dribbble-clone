@@ -1,4 +1,6 @@
 import { ProjectInterface } from '@/common.types'
+import Categories from '@/components/Categories'
+import Pagination from '@/components/Pagination'
 import ProjectCard from '@/components/ProjectCard'
 import { fetchAllProjects } from '@/lib/actions'
 
@@ -14,15 +16,31 @@ type ProjectSearch = {
     }
 }
 
-const Home = async () => {
-    const projects = (await fetchAllProjects()) as ProjectSearch
+type SearchParams = {
+    category?: string
+    endcursor?: string
+}
+
+type Props = {
+    searchParams: SearchParams
+}
+
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+export const revalidate = 0
+
+const Home = async ({ searchParams: { category, endcursor } }: Props) => {
+    const projects = (await fetchAllProjects(
+        category,
+        endcursor
+    )) as ProjectSearch
 
     const projectsToRender = projects?.projectSearch?.edges || []
 
     if (projectsToRender.length === 0) {
         return (
             <section className="flexStart flex-col paddings">
-                Caregories
+                <Categories />
                 <p className="no-result-text text-center">
                     No projects found, why don't you be first?
                 </p>
@@ -32,7 +50,7 @@ const Home = async () => {
 
     return (
         <section className="flex-start flex-col paddings mb-16">
-            <h1> Categories</h1>
+            <Categories />
 
             <section className="projects-grid">
                 {projectsToRender.map(
@@ -51,7 +69,14 @@ const Home = async () => {
                 )}
             </section>
 
-            <h1> LoadMore</h1>
+            <Pagination
+                startCursor={projects?.projectSearch?.pageInfo?.startCursor}
+                endCursor={projects?.projectSearch?.pageInfo?.endCursor}
+                hasPreviousPage={
+                    projects?.projectSearch?.pageInfo?.hasPreviousPage
+                }
+                hasNextPage={projects?.projectSearch?.pageInfo?.hasNextPage}
+            />
         </section>
     )
 }

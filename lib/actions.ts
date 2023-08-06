@@ -2,10 +2,12 @@ import { ProjectForm } from '@/common.types'
 import {
     createProjectMutation,
     createUserMutation,
+    deleteProjectMutation,
     getProjectByIdQuery,
     getProjectsOfUserQuery,
     getUserQuery,
     projectsQuery,
+    updateProjectMutation,
 } from '@/graphql'
 import { GraphQLClient } from 'graphql-request'
 
@@ -97,11 +99,11 @@ export const createNewProject = async (
 }
 export const fetchAllProjects = async (
     category?: string,
-    endcursor?: string
+    endCursor?: string
 ) => {
     client.setHeader('x-api-key', apiKey)
 
-    return makeGraphQLRequest(projectsQuery, { category, endcursor })
+    return makeGraphQLRequest(projectsQuery, { category, endCursor })
 }
 
 export const getProjectDetails = (id: string) => {
@@ -112,4 +114,46 @@ export const getProjectDetails = (id: string) => {
 export const getUserProjects = (id: string, last?: number) => {
     client.setHeader('x-api-key', apiKey)
     return makeGraphQLRequest(getProjectsOfUserQuery, { id, last })
+}
+
+export const deleteUserProject = (id: string, token: string) => {
+    client.setHeader('Authorization', `Bearer ${token}`)
+    return makeGraphQLRequest(deleteProjectMutation, { id })
+}
+
+export const updateUserProject = async (
+    form: ProjectForm,
+    projectId: string,
+    token: string
+) => {
+    function isBase64URL(s: string) {
+        // Define the regular expression pattern for Base64 URL
+        const pattern = /^data:image\/[a-z]+;base64,/
+
+        // Use test method to check if the string matches the pattern
+        return pattern.test(s)
+    }
+
+    let updatedForm = { ...form }
+
+    const isUploadingNewImage = isBase64URL(form.image)
+
+    if (isUploadingNewImage) {
+        const imageUrl = await uploadImage(form.image)
+
+        if (imageUrl.url) {
+            updatedForm = {
+                ...form,
+                image: imageUrl.url,
+            }
+        }
+    }
+
+    const variables = {
+        id: projectId,
+        input: updatedForm,
+    }
+
+    client.setHeader('Authorization', `Bearer ${token}`)
+    return makeGraphQLRequest(updateProjectMutation, variables)
 }

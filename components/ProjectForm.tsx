@@ -1,29 +1,30 @@
 'use client'
-import { SessionInterface } from '@/common.types'
+import { ProjectInterface, SessionInterface } from '@/common.types'
 import React, { useState } from 'react'
 import Image from 'next/image'
 import FormField from './FormField'
 import { categoryFilters } from '@/constants'
 import CustomMenu from './CustomMenu'
 import Button from './Button'
-import { createNewProject, fetchToken } from '@/lib/actions'
+import { createNewProject, fetchToken, updateUserProject } from '@/lib/actions'
 import { useRouter } from 'next/navigation'
 
 type ProjectFormProps = {
     type: string
     session: SessionInterface
+    project?: ProjectInterface
 }
 
-const ProjectForm = ({ type, session }: ProjectFormProps) => {
+const ProjectForm = ({ type, session, project }: ProjectFormProps) => {
     const [isSubmitting, setSubmitting] = useState(false)
     const [form, setForm] = useState({
-        image: '',
-        title: '',
-        description: '',
-        liveSiteUrl: '',
-        githubUrl: '',
-        linkedinUrl: '',
-        category: '',
+        image: project?.image || '',
+        title: project?.title || '',
+        description: project?.description || '',
+        liveSiteUrl: project?.liveSiteUrl || '',
+        githubUrl: project?.githubUrl || '',
+
+        category: project?.category || '',
     })
 
     const router = useRouter()
@@ -38,6 +39,12 @@ const ProjectForm = ({ type, session }: ProjectFormProps) => {
         try {
             if (type === 'create') {
                 await createNewProject(form, session?.user?.id, token)
+
+                router.push('/')
+            }
+
+            if (type === 'edit') {
+                await updateUserProject(form, project?.id as string, token)
 
                 router.push('/')
             }
@@ -127,16 +134,6 @@ const ProjectForm = ({ type, session }: ProjectFormProps) => {
                 state={form.githubUrl}
                 placeholder="https://github.com/user-name"
                 setState={(val: string) => handleStateChange('githubUrl', val)}
-            />
-
-            <FormField
-                type="url"
-                title="LinkedIn Url"
-                state={form.linkedinUrl}
-                placeholder="https://linkedin.com/user-name"
-                setState={(val: string) =>
-                    handleStateChange('linkedinUrl', val)
-                }
             />
 
             {/* custom input will be here soon */}
