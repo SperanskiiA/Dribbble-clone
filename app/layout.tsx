@@ -3,7 +3,7 @@ import './globals.css'
 
 export const metadata = {
     title: 'Flexibble',
-    description: 'Like Dribble but even better!:)',
+    description: 'Like Dribbble but even better!:)',
 }
 
 export default function RootLayout({
