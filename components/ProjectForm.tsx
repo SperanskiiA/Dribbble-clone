@@ -55,6 +55,7 @@ const ProjectForm = ({ type, session, project }: ProjectFormProps) => {
         } catch (error) {
             console.log(error)
         } finally {
+            console.log(form)
             setSubmitting(false)
         }
     }
