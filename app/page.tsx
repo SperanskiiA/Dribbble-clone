@@ -4,6 +4,15 @@ import Pagination from '@/components/Pagination'
 import ProjectCard from '@/components/ProjectCard'
 import { fetchAllProjects } from '@/lib/actions'
 
+type SearchParams = {
+    category?: string | null
+    endcursor?: string | null
+}
+
+type Props = {
+    searchParams: SearchParams
+}
+
 type ProjectSearch = {
     projectSearch: {
         edges: { node: ProjectInterface }[]
@@ -16,55 +25,46 @@ type ProjectSearch = {
     }
 }
 
-type SearchParams = {
-    category?: string
-    endcursor?: string
-}
-
-type Props = {
-    searchParams: SearchParams
-}
-
 export const dynamic = 'force-dynamic'
 export const dynamicParams = true
 export const revalidate = 0
 
 const Home = async ({ searchParams: { category, endcursor } }: Props) => {
-    // const Category = category ? category : ' '
+    const Category = category ? category : ' '
     const projects = (await fetchAllProjects(
         category,
         endcursor
     )) as ProjectSearch
 
-    const projectsToRender = projects?.projectSearch?.edges || []
+    const projectsToDisplay = projects?.projectSearch?.edges || []
 
-    if (projectsToRender.length === 0) {
+    if (projectsToDisplay.length === 0) {
         return (
             <section className="flexStart flex-col paddings">
                 <Categories />
+
                 <p className="no-result-text text-center">
-                    No projects found, why don't you be first?
+                    No projects found, go create some first.
                 </p>
             </section>
         )
     }
 
     return (
-        <section className="flex-start flex-col paddings mb-16">
+        <section className="flexStart flex-col paddings mb-16">
             <Categories />
 
             <section className="projects-grid">
-                {projectsToRender.map(
+                {projectsToDisplay.map(
                     ({ node }: { node: ProjectInterface }) => (
                         <ProjectCard
-                            key={node?.id}
+                            key={`${node?.id}`}
                             id={node?.id}
                             image={node?.image}
                             title={node?.title}
-                            description={node?.description}
-                            name={node?.createdBy?.name}
-                            avatarUrl={node?.createdBy?.avatarUrl}
-                            userId={node?.createdBy?.id}
+                            name={node?.createdBy.name}
+                            avatarUrl={node?.createdBy.avatarUrl}
+                            userId={node?.createdBy.id}
                         />
                     )
                 )}
@@ -76,7 +76,7 @@ const Home = async ({ searchParams: { category, endcursor } }: Props) => {
                 hasPreviousPage={
                     projects?.projectSearch?.pageInfo?.hasPreviousPage
                 }
-                hasNextPage={projects?.projectSearch?.pageInfo?.hasNextPage}
+                hasNextPage={projects?.projectSearch?.pageInfo.hasNextPage}
             />
         </section>
     )
