@@ -14,7 +14,7 @@ const ProfilePage = ({ user }: Props) => (
         <section className="flexBetween max-lg:flex-col gap-10 w-full">
             <div className="flex items-start flex-col w-full">
                 <Image
-                    src={user?.avatarUrl}
+                    src={user?.avararUrl}
                     width={100}
                     height={100}
                     className="rounded-full"
@@ -71,7 +71,7 @@ const ProfilePage = ({ user }: Props) => (
                             image={node?.image}
                             title={node?.title}
                             name={user.name}
-                            avatarUrl={user.avatarUrl}
+                            avararUrl={user.avararUrl}
                             userId={user.id}
                         />
                     )

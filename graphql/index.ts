@@ -44,7 +44,7 @@ export const createUserMutation = `
 			user {
 				name
 				email
-				avatarUrl
+				avararUrl
 				description
 				githubUrl
 				linkedinUrl
@@ -76,7 +76,7 @@ export const projectsQuery = `
             id
             email
             name
-            avatarUrl
+            avararUrl
           }
         }
       }
@@ -98,7 +98,7 @@ export const getProjectByIdQuery = `
         id
         name
         email
-        avatarUrl
+        avararUrl
       }
     }
   }
@@ -110,7 +110,7 @@ export const getUserQuery = `
       id
       name
       email
-      avatarUrl
+      avararUrl
       description
       githubUrl
       linkedinUrl
@@ -125,7 +125,7 @@ export const getProjectsOfUserQuery = `
       name
       email
       description
-      avatarUrl
+      avararUrl
       githubUrl
       linkedinUrl
       projects(last: $last) {

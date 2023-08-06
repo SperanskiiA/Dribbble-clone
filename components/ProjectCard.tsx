@@ -8,7 +8,7 @@ type ProjectCardProps = {
     title: string
     description?: string
     name: string
-    avatarUrl: string
+    avararUrl: string
     userId: string
 }
 const ProjectCard = ({
@@ -17,7 +17,7 @@ const ProjectCard = ({
     title,
     description,
     name,
-    avatarUrl,
+    avararUrl,
     userId,
 }: ProjectCardProps) => {
     return (
@@ -43,7 +43,7 @@ const ProjectCard = ({
                 <Link href={`/profile/${userId}`}>
                     <div className="flexCenter gap-2">
                         <Image
-                            src={avatarUrl}
+                            src={avararUrl}
                             alt={`${name}'s profile`}
                             width={24}
                             height={24}
