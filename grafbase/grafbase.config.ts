@@ -8,7 +8,7 @@ const User = g
             max: 20,
         }),
         email: g.string().unique(),
-        avatarUrl: g.url(),
+        avararUrl: g.url(),
         description: g.string().optional(),
         githubUrl: g.url().optional(),
         linkedinUrl: g.url().optional(),
