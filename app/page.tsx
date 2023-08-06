@@ -62,7 +62,7 @@ const Home = async ({ searchParams: { category, endcursor } }: Props) => {
                             title={node?.title}
                             description={node?.description}
                             name={node?.createdBy?.name}
-                            avararUrl={node?.createdBy?.avararUrl}
+                            avatarUrl={node?.createdBy?.avatarUrl}
                             userId={node?.createdBy?.id}
                         />
                     )
